@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  database:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: bakery
+      POSTGRES_PASSWORD: nguyen
+      POSTGRES_DB: bakery
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:      
