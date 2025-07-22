@@ -1,0 +1,11 @@
+database:
+  host: localhost
+  port: 5432
+  username: bakery
+  password: nguyen
+  dbname: bakery
+
+jwt:
+  secret: your_jwt_secret_key
+  algorithm: HS256
+  expiration: 3600
