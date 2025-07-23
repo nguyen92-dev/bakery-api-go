@@ -29,7 +29,7 @@ func main() {
 		config.Database.Password,
 		config.Database.Host,
 		config.Database.Port,
-		config.Database.Database,
+		config.Database.DbName,
 	)
 
 	m, err := migrate.New("file://scripts/migrations", dsn)

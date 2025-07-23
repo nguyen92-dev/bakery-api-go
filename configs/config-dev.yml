@@ -4,6 +4,11 @@ database:
   username: bakery
   password: nguyen
   dbname: bakery
+  sslmode: disable
+  timezone: Asia/Ho_Chi_Minh
+  max_idle_conns: 15
+  max_open_conns: 100
+  conn_max_lifetime: 5 # in minutes
 
 jwt:
   secret: your_jwt_secret_key
