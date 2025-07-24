@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"bakery-api/common"
+	"bakery-api/configs"
 	"bakery-api/domain/repository"
 	"context"
 )
@@ -10,7 +11,7 @@ type BaseUseCase[TEntity any, TRequest any, TResponse any] struct {
 	Repository repository.BaseRepository[TEntity]
 }
 
-func NewBaseUseCase[TEntity any, TRequest any, TResponse any](repo repository.BaseRepository[TEntity]) *BaseUseCase[TEntity, TRequest, TResponse] {
+func NewBaseUseCase[TEntity any, TRequest any, TResponse any](cfg *configs.Config, repo repository.BaseRepository[TEntity]) *BaseUseCase[TEntity, TRequest, TResponse] {
 	return &BaseUseCase[TEntity, TRequest, TResponse]{
 		Repository: repo,
 	}

@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"bakery-api/configs"
 	"bakery-api/domain/model"
 	"bakery-api/domain/repository"
 	"bakery-api/usecase/dto"
@@ -11,9 +12,9 @@ type CategoryUseCase struct {
 	base *BaseUseCase[model.Category, dto.CategoryRequestDto, dto.CategoryResponseDto]
 }
 
-func NewCategoryUseCase(repo repository.CategoryRepository) *CategoryUseCase {
+func NewCategoryUseCase(cfg *configs.Config, repo repository.CategoryRepository) *CategoryUseCase {
 	return &CategoryUseCase{
-		base: NewBaseUseCase[model.Category, dto.CategoryRequestDto, dto.CategoryResponseDto](repo),
+		base: NewBaseUseCase[model.Category, dto.CategoryRequestDto, dto.CategoryResponseDto](cfg, repo),
 	}
 }
 
@@ -37,9 +38,9 @@ type SizeUseCase struct {
 	base *BaseUseCase[model.Size, dto.SizeRequestDto, dto.SizeResponseDto]
 }
 
-func NewSizeUseCase(repo repository.SizeRepository) *SizeUseCase {
+func NewSizeUseCase(cfg *configs.Config, repo repository.SizeRepository) *SizeUseCase {
 	return &SizeUseCase{
-		base: NewBaseUseCase[model.Size, dto.SizeRequestDto, dto.SizeResponseDto](repo),
+		base: NewBaseUseCase[model.Size, dto.SizeRequestDto, dto.SizeResponseDto](cfg, repo),
 	}
 }
 
@@ -63,9 +64,9 @@ type ProductUseCase struct {
 	base *BaseUseCase[model.Product, dto.ProductRequestDto, dto.ProductResponseDto]
 }
 
-func NewProductUseCase(repo repository.ProductRepository) *ProductUseCase {
+func NewProductUseCase(cfg *configs.Config, repo repository.ProductRepository) *ProductUseCase {
 	return &ProductUseCase{
-		base: NewBaseUseCase[model.Product, dto.ProductRequestDto, dto.ProductResponseDto](repo),
+		base: NewBaseUseCase[model.Product, dto.ProductRequestDto, dto.ProductResponseDto](cfg, repo),
 	}
 }
 
