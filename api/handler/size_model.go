@@ -14,7 +14,7 @@ type SizeModelHandler struct {
 
 func NewSizeModelHandler(cfg *configs.Config) *SizeModelHandler {
 	return &SizeModelHandler{
-		usecase: usecase.NewSizeUseCase(cfg, dependency.GetSizeRepository(cfg)),
+		usecase: usecase.NewSizeUseCase(cfg, dependency.GetSizeRepository(cfg), dependency.GetCategoryRepository(cfg)),
 	}
 }
 

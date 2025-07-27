@@ -4,12 +4,17 @@ import (
 	"bakery-api/api/router"
 	"bakery-api/configs"
 
+	customValidator "bakery-api/usecase/validator"
+
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
+	"github.com/go-playground/validator/v10"
 )
 
 func InitServer(cfg *configs.Config) {
 	r := gin.Default()
 	RegisterRoutes(r, cfg)
+	RegisterValidator()
 
 	err := r.Run(":8080")
 	if err != nil {
@@ -27,5 +32,12 @@ func RegisterRoutes(r *gin.Engine, cfg *configs.Config) {
 
 		sizes := v1.Group("/sizes")
 		router.Sizes(sizes, cfg)
+	}
+}
+
+func RegisterValidator() {
+	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
+		v.RegisterValidation("non_special_char", customValidator.ValidateNonSpecialCharacter)
+
 	}
 }

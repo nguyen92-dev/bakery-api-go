@@ -1,9 +1,15 @@
 package validator
 
 import (
-	"bakery-api/domain/repository"
+	"regexp"
+
+	"github.com/go-playground/validator/v10"
 )
 
-func IdExist(id uint, repo repository.BaseRepository[any]) bool {
-	return true
+const nonSpecialCharRegex = `^[a-zA-Z0-9\s]+$`
+
+func ValidateNonSpecialCharacter(fl validator.FieldLevel) bool {
+	name := fl.Field().String()
+	matched, _ := regexp.MatchString(nonSpecialCharRegex, name)
+	return matched
 }
