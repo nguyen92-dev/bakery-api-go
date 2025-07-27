@@ -23,7 +23,9 @@ func RegisterRoutes(r *gin.Engine, cfg *configs.Config) {
 	v1 := api.Group("/v1")
 	{
 		categories := v1.Group("/categories")
-
 		router.Categories(categories, cfg)
+
+		sizes := v1.Group("/sizes")
+		router.Sizes(sizes, cfg)
 	}
 }

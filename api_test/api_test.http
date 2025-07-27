@@ -25,3 +25,34 @@ GET http://localhost:8080/api/v1/categories/3
 
 ### Get category by id
 DELETE http://localhost:8080/api/v1/categories/2
+
+
+### Create size
+POST http://localhost:8080/api/v1/sizes
+Content-Type: application/json
+
+{
+    "name": "Size M",
+    "category_id": 1,
+    "created_by": "NguyenND",
+    "updated_by": "NguyenND"
+}
+
+
+### Update size
+PUT http://localhost:8080/api/v1/sizes/1
+Content-Type: application/json
+
+{
+    "name": "Size L",
+    "category_id": 3,
+    "created_by": "NguyenND",
+    "updated_by": "NguyenND"
+}
+
+### Get size by id
+GET http://localhost:8080/api/v1/sizes/1
+
+
+### Delete size by id
+DELETE http://localhost:8080/api/v1/sizes/1
