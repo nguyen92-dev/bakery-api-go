@@ -1,23 +1,23 @@
 package dto
 
 type CategoryRequestDto struct {
-	Name        string `json:"name" validate:"required,max=100"`
-	Description string `json:"description,omitempty" validate:"max=500"`
-	CreatedBy   string `json:"created_by,omitempty" validate:"max=50"`
-	UpdatedBy   string `json:"updated_by,omitempty" validate:"max=50"`
+	Name        string `json:"name" binding:"required,max=100"`
+	Description string `json:"description,omitempty" binding:"max=500,non_special_char"`
+	CreatedBy   string `json:"created_by,omitempty" binding:"max=50"`
+	UpdatedBy   string `json:"updated_by,omitempty" binding:"max=50"`
 }
 
 type CategoryResponseDto struct {
 	Id          uint   `json:"id"`
 	Name        string `json:"name"`
 	Description string `json:"description,omitempty"`
-	CreatedBy   string `json:"created_by,omitempty" validate:"max=50"`
-	UpdatedBy   string `json:"updated_by,omitempty" validate:"max=50"`
+	CreatedBy   string `json:"created_by,omitempty" binding:"max=50"`
+	UpdatedBy   string `json:"updated_by,omitempty" binding:"max=50"`
 }
 
 type SizeRequestDto struct {
-	Name       string `json:"name" validate:"required,max=50"`
-	CategoryID uint   `json:"category_id" validate:"required"`
+	Name       string `json:"name" binding:"required,max=50,non_special_char"`
+	CategoryID uint   `json:"category_id" binding:"required"`
 }
 
 type SizeResponseDto struct {
@@ -27,9 +27,9 @@ type SizeResponseDto struct {
 }
 
 type ProductSizeRequestDto struct {
-	ProductID uint    `json:"product_id" validate:"required"`
-	SizeID    uint    `json:"size_id" validate:"required"`
-	Price     float64 `json:"price" validate:"required"`
+	ProductID uint    `json:"product_id" binding:"required"`
+	SizeID    uint    `json:"size_id" binding:"required"`
+	Price     float64 `json:"price" binding:"required"`
 }
 
 type ProductSizeResponseDto struct {
@@ -40,10 +40,10 @@ type ProductSizeResponseDto struct {
 }
 
 type ProductRequestDto struct {
-	Name        string                  `json:"name" validate:"required,max=100"`
-	Description string                  `json:"description,omitempty" validate:"max=500"`
-	CategoryID  uint                    `json:"category_id" validate:"required"`
-	ImageURL    string                  `json:"image_url,omitempty" validate:"max=255"`
+	Name        string                  `json:"name" binding:"required,max=100"`
+	Description string                  `json:"description,omitempty" binding:"max=500"`
+	CategoryID  uint                    `json:"category_id" binding:"required"`
+	ImageURL    string                  `json:"image_url,omitempty" binding:"max=255"`
 	Prices      []ProductSizeRequestDto `json:"prices,omitempty"`
 }
 

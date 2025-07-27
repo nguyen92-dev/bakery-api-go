@@ -6,6 +6,7 @@ import (
 	"bakery-api/domain/repository"
 	"bakery-api/usecase/dto"
 	"context"
+	"errors"
 )
 
 type CategoryUseCase struct {
@@ -35,16 +36,21 @@ func (uc *CategoryUseCase) FindById(ctx context.Context, id int) (dto.CategoryRe
 }
 
 type SizeUseCase struct {
-	base *BaseUseCase[model.Size, dto.SizeRequestDto, dto.SizeResponseDto]
+	base         *BaseUseCase[model.Size, dto.SizeRequestDto, dto.SizeResponseDto]
+	categoryRepo repository.CategoryRepository
 }
 
-func NewSizeUseCase(cfg *configs.Config, repo repository.SizeRepository) *SizeUseCase {
+func NewSizeUseCase(cfg *configs.Config, repo repository.SizeRepository, categoryRepo repository.CategoryRepository) *SizeUseCase {
 	return &SizeUseCase{
-		base: NewBaseUseCase[model.Size, dto.SizeRequestDto, dto.SizeResponseDto](cfg, repo),
+		base:         NewBaseUseCase[model.Size, dto.SizeRequestDto, dto.SizeResponseDto](cfg, repo),
+		categoryRepo: categoryRepo,
 	}
 }
 
 func (uc *SizeUseCase) Create(ctx context.Context, request dto.SizeRequestDto) (dto.SizeResponseDto, error) {
+	if !uc.validateCategoryId(ctx, int(request.CategoryID)) {
+		return dto.SizeResponseDto{}, errors.New("category ID does not exist")
+	}
 	return uc.base.Create(ctx, request)
 }
 
@@ -58,6 +64,11 @@ func (uc *SizeUseCase) Delete(ctx context.Context, id int) error {
 
 func (uc *SizeUseCase) FindById(ctx context.Context, id int) (dto.SizeResponseDto, error) {
 	return uc.base.FindById(ctx, id)
+}
+
+func (uc *SizeUseCase) validateCategoryId(ctx context.Context, id int) bool {
+	_, err := uc.categoryRepo.FindById(ctx, id)
+	return err == nil
 }
 
 type ProductUseCase struct {
