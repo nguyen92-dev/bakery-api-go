@@ -39,12 +39,17 @@ type ProductSizeResponseDto struct {
 	Size      SizeResponseDto `json:"size"`
 }
 
+type ProductPriceRequestDto struct {
+	SizeID uint    `json:"size_id" binding:"required"`
+	Price  float64 `json:"price" binding:"required"`
+}
+
 type ProductRequestDto struct {
-	Name        string                  `json:"name" binding:"required,max=100"`
-	Description string                  `json:"description,omitempty" binding:"max=500"`
-	CategoryID  uint                    `json:"category_id" binding:"required"`
-	ImageURL    string                  `json:"image_url,omitempty" binding:"max=255"`
-	Prices      []ProductSizeRequestDto `json:"prices,omitempty"`
+	Name        string                   `json:"name" binding:"required,max=100"`
+	Description string                   `json:"description,omitempty" binding:"max=500"`
+	CategoryID  uint                     `json:"category_id" binding:"required"`
+	ImageURL    string                   `json:"image_url,omitempty" binding:"max=255"`
+	Prices      []ProductPriceRequestDto `json:"prices,omitempty"`
 }
 
 type ProductResponseDto struct {

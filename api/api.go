@@ -38,6 +38,5 @@ func RegisterRoutes(r *gin.Engine, cfg *configs.Config) {
 func RegisterValidator() {
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
 		v.RegisterValidation("non_special_char", customValidator.ValidateNonSpecialCharacter)
-
 	}
 }
