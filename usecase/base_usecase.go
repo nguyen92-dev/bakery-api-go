@@ -54,3 +54,8 @@ func (u *BaseUseCase[TEntity, TRequest, TResponse]) FindById(ctx context.Context
 	response, _ = common.Mapper[TResponse](entity)
 	return response, nil
 }
+
+func (u *BaseUseCase[TEntity, TRequest, TResponse]) ValidateId(ctx context.Context, id int) bool {
+	_, err := u.FindById(ctx, id)
+	return err == nil
+}
