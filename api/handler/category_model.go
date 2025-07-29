@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"bakery-api/configs"
 	"bakery-api/dependency"
 	"bakery-api/usecase"
 
@@ -12,9 +11,9 @@ type CategoryModelHanldler struct {
 	usecase *usecase.CategoryUseCase
 }
 
-func NewCategoryModelHandler(cfg *configs.Config) *CategoryModelHanldler {
+func NewCategoryModelHandler() *CategoryModelHanldler {
 	return &CategoryModelHanldler{
-		usecase: usecase.NewCategoryUseCase(cfg, dependency.GetCategoryRepository(cfg)),
+		usecase: usecase.NewCategoryUseCase(dependency.GetCategoryRepository()),
 	}
 }
 

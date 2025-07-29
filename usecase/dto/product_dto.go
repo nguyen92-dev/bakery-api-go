@@ -2,7 +2,7 @@ package dto
 
 type CategoryRequestDto struct {
 	Name        string `json:"name" binding:"required,max=100"`
-	Description string `json:"description,omitempty" binding:"max=500,non_special_char"`
+	Description string `json:"description,omitempty" binding:"max=500"`
 	CreatedBy   string `json:"created_by,omitempty" binding:"max=50"`
 	UpdatedBy   string `json:"updated_by,omitempty" binding:"max=50"`
 }

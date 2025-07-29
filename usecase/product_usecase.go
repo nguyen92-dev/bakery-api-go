@@ -13,9 +13,9 @@ type CategoryUseCase struct {
 	base *BaseUseCase[model.Category, dto.CategoryRequestDto, dto.CategoryResponseDto]
 }
 
-func NewCategoryUseCase(cfg *configs.Config, repo repository.CategoryRepository) *CategoryUseCase {
+func NewCategoryUseCase(repo repository.CategoryRepository) *CategoryUseCase {
 	return &CategoryUseCase{
-		base: NewBaseUseCase[model.Category, dto.CategoryRequestDto, dto.CategoryResponseDto](cfg, repo),
+		base: NewBaseUseCase[model.Category, dto.CategoryRequestDto, dto.CategoryResponseDto](repo),
 	}
 }
 
@@ -40,10 +40,10 @@ type SizeUseCase struct {
 	categoryUseCase *CategoryUseCase
 }
 
-func NewSizeUseCase(cfg *configs.Config, repo repository.SizeRepository, categoryRepo repository.CategoryRepository) *SizeUseCase {
+func NewSizeUseCase(repo repository.SizeRepository, categoryRepo repository.CategoryRepository) *SizeUseCase {
 	return &SizeUseCase{
-		base:            NewBaseUseCase[model.Size, dto.SizeRequestDto, dto.SizeResponseDto](cfg, repo),
-		categoryUseCase: NewCategoryUseCase(cfg, categoryRepo),
+		base:            NewBaseUseCase[model.Size, dto.SizeRequestDto, dto.SizeResponseDto](repo),
+		categoryUseCase: NewCategoryUseCase(categoryRepo),
 	}
 }
 
@@ -74,9 +74,9 @@ type ProductUseCase struct {
 
 func NewProductUseCase(cfg *configs.Config, repo repository.ProductRepository, sizeRepo repository.SizeRepository, categoryRepo repository.CategoryRepository) *ProductUseCase {
 	return &ProductUseCase{
-		base:            NewBaseUseCase[model.Product, dto.ProductRequestDto, dto.ProductResponseDto](cfg, repo),
-		SizeUseCase:     NewSizeUseCase(cfg, sizeRepo, categoryRepo),
-		CategoryUseCase: NewCategoryUseCase(cfg, categoryRepo),
+		base:            NewBaseUseCase[model.Product, dto.ProductRequestDto, dto.ProductResponseDto](repo),
+		SizeUseCase:     NewSizeUseCase(sizeRepo, categoryRepo),
+		CategoryUseCase: NewCategoryUseCase(categoryRepo),
 	}
 }
 

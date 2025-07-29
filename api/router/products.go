@@ -2,13 +2,12 @@ package router
 
 import (
 	"bakery-api/api/handler"
-	"bakery-api/configs"
 
 	"github.com/gin-gonic/gin"
 )
 
-func Categories(r *gin.RouterGroup, cfg *configs.Config) {
-	h := handler.NewCategoryModelHandler(cfg)
+func Categories(r *gin.RouterGroup) {
+	h := handler.NewCategoryModelHandler()
 
 	r.POST("/", h.CreateCategory)
 	r.PUT("/:id", h.UpdateCategory)
@@ -16,8 +15,8 @@ func Categories(r *gin.RouterGroup, cfg *configs.Config) {
 	r.GET("/:id", h.GetCategory)
 }
 
-func Sizes(r *gin.RouterGroup, cfg *configs.Config) {
-	handler := handler.NewSizeModelHandler(cfg)
+func Sizes(r *gin.RouterGroup) {
+	handler := handler.NewSizeModelHandler()
 
 	r.POST("/", handler.CreateSize)
 	r.PUT("/:id", handler.UpdateSize)

@@ -7,11 +7,11 @@ import (
 )
 
 func main() {
-	cfg := configs.GetConfig()
+	configs.Cfg = configs.GetConfig()
 
-	err := database.InitDb(cfg)
+	err := database.InitDb(configs.Cfg)
 	if err != nil {
 		panic(err)
 	}
-	api.InitServer(cfg)
+	api.InitServer()
 }
