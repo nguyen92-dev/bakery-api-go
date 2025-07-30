@@ -13,7 +13,7 @@ type CategoryModelHanldler struct {
 
 func NewCategoryModelHandler() *CategoryModelHanldler {
 	return &CategoryModelHanldler{
-		usecase: usecase.NewCategoryUseCase(dependency.GetCategoryRepository()),
+		usecase: dependency.GetCategoryUseCase(),
 	}
 }
 
