@@ -3,14 +3,14 @@ POST http://localhost:8080/api/v1/categories
 Content-Type: application/json
 
 {
-    "name": "Bánh kem ít ngọt",
+    "name": "Bánh kem ít ngọt 2",
     "description": "Bánh kem ít ngọt, phù hợp với người ăn kiêng",
     "created_by": "NguyenND",
     "updated_by": "NguyenND"
 }
 
 ### Update category
-PUT http://localhost:8080/api/v1/categories/2
+PUT http://localhost:8080/api/v1/categories/4
 Content-Type: application/json
 
 {
@@ -20,11 +20,11 @@ Content-Type: application/json
 
 
 ### Get category by id
-GET http://localhost:8080/api/v1/categories/3
+GET http://localhost:8080/api/v1/categories/10
 
 
 ### Delete category by id
-DELETE http://localhost:8080/api/v1/categories/1
+DELETE http://localhost:8080/api/v1/categories/9
 
 
 ### Create size
@@ -32,15 +32,15 @@ POST http://localhost:8080/api/v1/sizes
 Content-Type: application/json
 
 {
-    "name": "Size %*&",
-    "category_id": 3,
+    "name": "Size S",
+    "category_id": 10,
     "created_by": "NguyenND",
     "updated_by": "NguyenND"
 }
 
 
 ### Update size
-PUT http://localhost:8080/api/v1/sizes/1
+PUT http://localhost:8080/api/v1/sizes/6
 Content-Type: application/json
 
 {
@@ -51,8 +51,8 @@ Content-Type: application/json
 }
 
 ### Get size by id
-GET http://localhost:8080/api/v1/sizes/1
+GET http://localhost:8080/api/v1/sizes/5
 
 
 ### Delete size by id
-DELETE http://localhost:8080/api/v1/sizes/1
+DELETE http://localhost:8080/api/v1/sizes/5

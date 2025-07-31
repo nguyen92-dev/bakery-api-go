@@ -3,27 +3,35 @@ package usecase
 import (
 	"bakery-api/common"
 	"bakery-api/domain/repository"
+	"bakery-api/infra/persisstence/database"
 	"context"
 )
 
 type BaseUseCase[TEntity any, TRequest any, TResponse any] struct {
-	Repository repository.BaseRepository[TEntity]
+	Repository         repository.BaseRepository[TEntity]
+	TransactionManager database.TransactionManager
 }
 
 func NewBaseUseCase[TEntity any, TRequest any, TResponse any](repo repository.BaseRepository[TEntity]) *BaseUseCase[TEntity, TRequest, TResponse] {
 	return &BaseUseCase[TEntity, TRequest, TResponse]{
-		Repository: repo,
+		Repository:         repo,
+		TransactionManager: database.NewGormTransactionManager(),
 	}
 }
 
 func (u *BaseUseCase[TEntity, TRequest, TResponse]) Create(ctx context.Context, request TRequest) (TResponse, error) {
 	var response TResponse
 	entity, _ := common.Mapper[TEntity](request)
-
-	createdEntity, err := u.Repository.Create(ctx, entity)
+	transaction, err := u.TransactionManager.Begin(ctx)
 	if err != nil {
 		return response, err
 	}
+	createdEntity, err := u.Repository.Create(transaction.DB(), entity)
+	if err != nil {
+		transaction.Rollback()
+		return response, err
+	}
+	transaction.Commit()
 	response, _ = common.Mapper[TResponse](createdEntity)
 	return response, nil
 }
@@ -31,22 +39,39 @@ func (u *BaseUseCase[TEntity, TRequest, TResponse]) Create(ctx context.Context, 
 func (u *BaseUseCase[TEntity, TRequest, TResponse]) Update(ctx context.Context, id int, request TRequest) (TResponse, error) {
 	var response TResponse
 	entity, _ := common.Mapper[TEntity](request)
-
-	updatedEntity, err := u.Repository.Update(ctx, id, entity)
+	transaction, err := u.TransactionManager.Begin(ctx)
 	if err != nil {
 		return response, err
 	}
+	updatedEntity, err := u.Repository.Update(transaction.DB(), id, entity)
+	if err != nil {
+		transaction.Rollback()
+		return response, err
+	}
+	transaction.Commit()
 	response, _ = common.Mapper[TResponse](updatedEntity)
 	return response, nil
 }
 
 func (u *BaseUseCase[TEntity, TRequest, TResponse]) Delete(ctx context.Context, id int) error {
-	return u.Repository.Delete(ctx, id)
+	transaction, err := u.TransactionManager.Begin(ctx)
+	if err != nil {
+		return err
+	}
+	if deleteError := u.Repository.Delete(transaction.DB(), id); deleteError != nil {
+		transaction.Rollback()
+		return err
+	}
+	return transaction.Commit()
 }
 
 func (u *BaseUseCase[TEntity, TRequest, TResponse]) FindById(ctx context.Context, id int) (TResponse, error) {
 	var response TResponse
-	entity, err := u.Repository.FindById(ctx, id)
+	transaction, err := u.TransactionManager.Begin(ctx)
+	if err != nil {
+		return response, err
+	}
+	entity, err := u.Repository.FindById(transaction.DB(), id)
 	if err != nil {
 		return response, err
 	}
