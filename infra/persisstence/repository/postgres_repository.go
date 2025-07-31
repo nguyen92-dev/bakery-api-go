@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"bakery-api/configs"
 	"bakery-api/infra/persisstence/database"
 	"context"
 
@@ -13,7 +12,7 @@ type BaseRepository[TEntity any] struct {
 	preloads []database.PreloadEntity
 }
 
-func NewBaseRepository[TEntity any](cfg *configs.Config, preloads []database.PreloadEntity) *BaseRepository[TEntity] {
+func NewBaseRepository[TEntity any](preloads []database.PreloadEntity) *BaseRepository[TEntity] {
 	return &BaseRepository[TEntity]{
 		database: database.GetDbClient(),
 		preloads: preloads,

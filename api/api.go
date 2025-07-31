@@ -2,7 +2,6 @@ package api
 
 import (
 	"bakery-api/api/router"
-	"bakery-api/configs"
 
 	customValidator "bakery-api/usecase/validator"
 
@@ -11,9 +10,9 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-func InitServer(cfg *configs.Config) {
+func InitServer() {
 	r := gin.Default()
-	RegisterRoutes(r, cfg)
+	RegisterRoutes(r)
 	RegisterValidator()
 
 	err := r.Run(":8080")
@@ -22,16 +21,19 @@ func InitServer(cfg *configs.Config) {
 	}
 }
 
-func RegisterRoutes(r *gin.Engine, cfg *configs.Config) {
+func RegisterRoutes(r *gin.Engine) {
 	api := r.Group("/api")
 
 	v1 := api.Group("/v1")
 	{
 		categories := v1.Group("/categories")
-		router.Categories(categories, cfg)
+		router.Categories(categories)
 
 		sizes := v1.Group("/sizes")
-		router.Sizes(sizes, cfg)
+		router.Sizes(sizes)
+
+		product := v1.Group("/products")
+		router.Products(product)
 	}
 }
 

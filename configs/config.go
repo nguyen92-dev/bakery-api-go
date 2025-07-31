@@ -8,6 +8,8 @@ import (
 	"github.com/spf13/viper"
 )
 
+var Cfg *Config
+
 type Config struct {
 	Database DatabaseConfig `yaml:"database"`
 }

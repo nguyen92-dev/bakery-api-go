@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"bakery-api/configs"
 	"bakery-api/dependency"
 	"bakery-api/usecase"
 
@@ -12,9 +11,9 @@ type SizeModelHandler struct {
 	usecase *usecase.SizeUseCase
 }
 
-func NewSizeModelHandler(cfg *configs.Config) *SizeModelHandler {
+func NewSizeModelHandler() *SizeModelHandler {
 	return &SizeModelHandler{
-		usecase: usecase.NewSizeUseCase(cfg, dependency.GetSizeRepository(cfg), dependency.GetCategoryRepository(cfg)),
+		usecase: dependency.GetSizeUseCase(),
 	}
 }
 
