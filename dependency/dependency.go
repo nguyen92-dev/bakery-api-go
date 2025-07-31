@@ -8,10 +8,16 @@ import (
 	"bakery-api/usecase"
 )
 
+// Dependency injection
+// for repositories
 var categoryRepository contractRepository.CategoryRepository
 var sizeRepository contractRepository.SizeRepository
+var productRepository contractRepository.ProductRepository
+
+// for use cases
 var categoryUseCase *usecase.CategoryUseCase
 var sizeUseCase *usecase.SizeUseCase
+var productUseCase *usecase.ProductUseCase
 
 func InitCategoryRepository() {
 	preloads := []database.PreloadEntity{}
@@ -23,23 +29,23 @@ func InitSizeRepository() {
 	sizeRepository = infraRepository.NewBaseRepository[model.Size](preloads)
 }
 
-func InitCategoryUseCase() {
-	if categoryUseCase == nil {
-		categoryUseCase = usecase.NewCategoryUseCase(GetCategoryRepository())
+func InitProductRepository() {
+	preloads := []database.PreloadEntity{
+		{Entity: "Category"},
 	}
+	productRepository = infraRepository.NewBaseRepository[model.Product](preloads)
+}
+
+func InitCategoryUseCase() {
+	categoryUseCase = usecase.NewCategoryUseCase(GetCategoryRepository())
 }
 
 func InitSizeUseCase() {
-	if sizeRepository == nil {
-		InitSizeRepository()
-	}
-	categoryRepo := GetCategoryRepository()
-	sizeUseCase = usecase.NewSizeUseCase(sizeRepository, categoryRepo)
+	sizeUseCase = usecase.NewSizeUseCase(GetSizeRepository(), GetCategoryRepository())
 }
 
-func InitDependencies() {
-	InitCategoryRepository()
-	InitSizeRepository()
+func InitProductUseCase() {
+	productUseCase = usecase.NewProductUseCase(GetProductRepository(), GetSizeRepository(), GetCategoryRepository())
 }
 
 func GetCategoryRepository() contractRepository.CategoryRepository {
@@ -56,6 +62,13 @@ func GetSizeRepository() contractRepository.SizeRepository {
 	return sizeRepository
 }
 
+func GetProductRepository() contractRepository.ProductRepository {
+	if productRepository == nil {
+		InitProductRepository()
+	}
+	return productRepository
+}
+
 func GetCategoryUseCase() *usecase.CategoryUseCase {
 	if categoryUseCase == nil {
 		InitCategoryUseCase()
@@ -68,4 +81,11 @@ func GetSizeUseCase() *usecase.SizeUseCase {
 		InitSizeUseCase()
 	}
 	return sizeUseCase
+}
+
+func GetProductUseCase() *usecase.ProductUseCase {
+	if productUseCase == nil {
+		InitProductUseCase()
+	}
+	return productUseCase
 }

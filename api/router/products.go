@@ -23,3 +23,12 @@ func Sizes(r *gin.RouterGroup) {
 	r.DELETE("/:id", handler.DeleteSize)
 	r.GET("/:id", handler.GetSizeById)
 }
+
+func Products(r *gin.RouterGroup) {
+	h := handler.NewProductModelHandler()
+
+	r.POST("/", h.CreateProduct)
+	r.PUT("/:id", h.UpdateProduct)
+	r.DELETE("/:id", h.DeleteProduct)
+	r.GET("/:id", h.GetProductById)
+}

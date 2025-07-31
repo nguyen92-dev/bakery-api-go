@@ -31,6 +31,9 @@ func RegisterRoutes(r *gin.Engine) {
 
 		sizes := v1.Group("/sizes")
 		router.Sizes(sizes)
+
+		product := v1.Group("/products")
+		router.Products(product)
 	}
 }
 
