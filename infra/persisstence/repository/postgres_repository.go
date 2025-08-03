@@ -25,7 +25,7 @@ func (r *BaseRepository[TEntity]) Create(tx *gorm.DB, entity TEntity) (TEntity, 
 	return entity, nil
 }
 
-func (r *BaseRepository[TEntity]) Update(tx *gorm.DB, id int, entity TEntity) (TEntity, error) {
+func (r *BaseRepository[TEntity]) Update(tx *gorm.DB, id uint, entity TEntity) (TEntity, error) {
 	var existingEntity TEntity
 
 	if err := tx.First(&existingEntity, id).Error; err != nil {
@@ -40,7 +40,7 @@ func (r *BaseRepository[TEntity]) Update(tx *gorm.DB, id int, entity TEntity) (T
 	return existingEntity, nil
 }
 
-func (r *BaseRepository[TEntity]) Delete(tx *gorm.DB, id int) error {
+func (r *BaseRepository[TEntity]) Delete(tx *gorm.DB, id uint) error {
 	var entity TEntity
 	if err := tx.First(&entity, id).Error; err != nil {
 		tx.Rollback()
@@ -50,7 +50,7 @@ func (r *BaseRepository[TEntity]) Delete(tx *gorm.DB, id int) error {
 	return tx.Delete(&entity).Error
 }
 
-func (r *BaseRepository[TEntity]) FindById(tx *gorm.DB, id int) (TEntity, error) {
+func (r *BaseRepository[TEntity]) FindById(tx *gorm.DB, id uint) (TEntity, error) {
 	model := new(TEntity)
 	db := database.Preload(r.database, r.preloads)
 	if err := db.Where("id = ?", id).First(model).Error; err != nil {

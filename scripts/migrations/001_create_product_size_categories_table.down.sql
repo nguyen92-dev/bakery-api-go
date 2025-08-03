@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS product_prices;
+DROP TABLE IF EXISTS prices;
 DROP TABLE IF EXISTS sizes;
 DROP TABLE IF EXISTS products;
 DROP TABLE IF EXISTS categories;

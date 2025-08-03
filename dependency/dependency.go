@@ -13,11 +13,13 @@ import (
 var categoryRepository contractRepository.CategoryRepository
 var sizeRepository contractRepository.SizeRepository
 var productRepository contractRepository.ProductRepository
+var priceRepository contractRepository.PriceRepository
 
 // for use cases
 var categoryUseCase *usecase.CategoryUseCase
 var sizeUseCase *usecase.SizeUseCase
 var productUseCase *usecase.ProductUseCase
+var priceUseCase *usecase.PriceUseCase
 
 func InitCategoryRepository() {
 	preloads := []database.PreloadEntity{}
@@ -32,8 +34,17 @@ func InitSizeRepository() {
 func InitProductRepository() {
 	preloads := []database.PreloadEntity{
 		{Entity: "Category"},
+		{Entity: "Prices"},
+		{Entity: "Prices.Size"},
 	}
 	productRepository = infraRepository.NewBaseRepository[model.Product](preloads)
+}
+
+func InitPriceRepository() {
+	preloads := []database.PreloadEntity{
+		{Entity: "Size"},
+	}
+	priceRepository = infraRepository.NewBaseRepository[model.Price](preloads)
 }
 
 func InitCategoryUseCase() {
@@ -45,7 +56,11 @@ func InitSizeUseCase() {
 }
 
 func InitProductUseCase() {
-	productUseCase = usecase.NewProductUseCase(GetProductRepository(), GetSizeRepository(), GetCategoryRepository())
+	productUseCase = usecase.NewProductUseCase(GetProductRepository(), GetSizeUseCase(), GetCategoryUseCase(), GetPriceUseCase())
+}
+
+func InitPriceUsecase() {
+	priceUseCase = usecase.NewPriceUseCase(GetPriceRepository())
 }
 
 func GetCategoryRepository() contractRepository.CategoryRepository {
@@ -69,6 +84,13 @@ func GetProductRepository() contractRepository.ProductRepository {
 	return productRepository
 }
 
+func GetPriceRepository() contractRepository.PriceRepository {
+	if priceRepository == nil {
+		InitPriceRepository()
+	}
+	return priceRepository
+}
+
 func GetCategoryUseCase() *usecase.CategoryUseCase {
 	if categoryUseCase == nil {
 		InitCategoryUseCase()
@@ -88,4 +110,11 @@ func GetProductUseCase() *usecase.ProductUseCase {
 		InitProductUseCase()
 	}
 	return productUseCase
+}
+
+func GetPriceUseCase() *usecase.PriceUseCase {
+	if priceUseCase == nil {
+		InitPriceUsecase()
+	}
+	return priceUseCase
 }

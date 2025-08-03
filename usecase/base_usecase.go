@@ -36,7 +36,7 @@ func (u *BaseUseCase[TEntity, TRequest, TResponse]) Create(ctx context.Context, 
 	return response, nil
 }
 
-func (u *BaseUseCase[TEntity, TRequest, TResponse]) Update(ctx context.Context, id int, request TRequest) (TResponse, error) {
+func (u *BaseUseCase[TEntity, TRequest, TResponse]) Update(ctx context.Context, id uint, request TRequest) (TResponse, error) {
 	var response TResponse
 	entity, _ := common.Mapper[TEntity](request)
 	transaction, err := u.TransactionManager.Begin(ctx)
@@ -53,7 +53,7 @@ func (u *BaseUseCase[TEntity, TRequest, TResponse]) Update(ctx context.Context, 
 	return response, nil
 }
 
-func (u *BaseUseCase[TEntity, TRequest, TResponse]) Delete(ctx context.Context, id int) error {
+func (u *BaseUseCase[TEntity, TRequest, TResponse]) Delete(ctx context.Context, id uint) error {
 	transaction, err := u.TransactionManager.Begin(ctx)
 	if err != nil {
 		return err
@@ -65,7 +65,7 @@ func (u *BaseUseCase[TEntity, TRequest, TResponse]) Delete(ctx context.Context, 
 	return transaction.Commit()
 }
 
-func (u *BaseUseCase[TEntity, TRequest, TResponse]) FindById(ctx context.Context, id int) (TResponse, error) {
+func (u *BaseUseCase[TEntity, TRequest, TResponse]) FindById(ctx context.Context, id uint) (TResponse, error) {
 	var response TResponse
 	transaction, err := u.TransactionManager.Begin(ctx)
 	if err != nil {
@@ -79,7 +79,7 @@ func (u *BaseUseCase[TEntity, TRequest, TResponse]) FindById(ctx context.Context
 	return response, nil
 }
 
-func (u *BaseUseCase[TEntity, TRequest, TResponse]) ValidateId(ctx context.Context, id int) bool {
+func (u *BaseUseCase[TEntity, TRequest, TResponse]) ValidateId(ctx context.Context, id uint) bool {
 	_, err := u.FindById(ctx, id)
 	return err == nil
 }

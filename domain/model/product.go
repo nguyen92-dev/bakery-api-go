@@ -12,7 +12,7 @@ type Size struct {
 	CategoryID uint   `gorm:"not null" json:"category_id"`
 }
 
-type ProductSize struct {
+type Price struct {
 	BaseModel
 	ProductID uint    `gorm:"not null" json:"product_id"`
 	SizeID    uint    `gorm:"not null" json:"size_id"`
@@ -26,6 +26,5 @@ type Product struct {
 	Description string   `gorm:"type:text" json:"description,omitempty"`
 	Category    Category `gorm:"foreignKey:CategoryID" json:"category"`
 	CategoryID  uint     `gorm:"not null" json:"category_id"`
-	ImageURL    string   `gorm:"type:varchar(255)" json:"image_url,omitempty"`
-	Prices      []ProductSize
+	Prices      []Price  `gorm:"foreignKey:ProductID"`
 }

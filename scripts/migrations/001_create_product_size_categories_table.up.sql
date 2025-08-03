@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS sizes (
 );
 
 
-CREATE TABLE IF NOT EXISTS product_prices (
+CREATE TABLE IF NOT EXISTS prices (
     id SERIAL PRIMARY KEY,
     product_id INT NOT NULL,
     size_id INT NOT NULL,

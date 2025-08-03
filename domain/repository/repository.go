@@ -8,9 +8,9 @@ import (
 
 type BaseRepository[TEntity any] interface {
 	Create(tx *gorm.DB, entity TEntity) (TEntity, error)
-	Update(tx *gorm.DB, id int, entity TEntity) (TEntity, error)
-	Delete(tx *gorm.DB, id int) error
-	FindById(tx *gorm.DB, id int) (TEntity, error)
+	Update(tx *gorm.DB, id uint, entity TEntity) (TEntity, error)
+	Delete(tx *gorm.DB, id uint) error
+	FindById(tx *gorm.DB, id uint) (TEntity, error)
 }
 
 type CategoryRepository interface {
@@ -23,4 +23,8 @@ type SizeRepository interface {
 
 type ProductRepository interface {
 	BaseRepository[model.Product]
+}
+
+type PriceRepository interface {
+	BaseRepository[model.Price]
 }
