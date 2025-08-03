@@ -3,14 +3,14 @@ POST http://localhost:8080/api/v1/categories
 Content-Type: application/json
 
 {
-    "name": "Bánh kem ít ngọt",
-    "description": "Bánh kem ít ngọt, phù hợp với người ăn kiêng",
+    "name": "Bánh rau câu",
+    "description": "Bánh rau câu với nhiều hương vị khác nhau",
     "created_by": "NguyenND",
     "updated_by": "NguyenND"
 }
 
 ### Update category
-PUT http://localhost:8080/api/v1/categories/2
+PUT http://localhost:8080/api/v1/categories/4
 Content-Type: application/json
 
 {
@@ -20,11 +20,11 @@ Content-Type: application/json
 
 
 ### Get category by id
-GET http://localhost:8080/api/v1/categories/3
+GET http://localhost:8080/api/v1/categories/11
 
 
 ### Delete category by id
-DELETE http://localhost:8080/api/v1/categories/1
+DELETE http://localhost:8080/api/v1/categories/9
 
 
 ### Create size
@@ -32,27 +32,63 @@ POST http://localhost:8080/api/v1/sizes
 Content-Type: application/json
 
 {
-    "name": "Size %*&",
-    "category_id": 3,
+    "name": "Size S",
+    "category_id": 1,
     "created_by": "NguyenND",
     "updated_by": "NguyenND"
 }
 
 
 ### Update size
-PUT http://localhost:8080/api/v1/sizes/1
+PUT http://localhost:8080/api/v1/sizes/7
 Content-Type: application/json
 
 {
     "name": "Size L",
-    "category_id": 3,
+    "category_id": 11,
     "created_by": "NguyenND",
     "updated_by": "NguyenND"
 }
 
 ### Get size by id
-GET http://localhost:8080/api/v1/sizes/1
+GET http://localhost:8080/api/v1/sizes/4
 
 
 ### Delete size by id
-DELETE http://localhost:8080/api/v1/sizes/1
+DELETE http://localhost:8080/api/v1/sizes/4
+
+
+### Create products
+POST http://localhost:8080/api/v1/products
+Content-Type: application/json
+
+{
+    "name": "Banh kem full dau",
+    "description": "Banh kem nhieu xoai tuoi",
+    "category_id": 1,
+    "prices": [
+        {
+            "size_id": 1,
+            "price": 185000
+        }
+    ]
+}
+
+### Update products
+PUT http://localhost:8080/api/v1/products/5
+Content-Type: application/json
+
+{
+    "name": "Banh kem full xoai",
+    "description": "Banh kem nhieu xoai tuoi",
+    "category_id": 1,
+    "prices": [
+        {
+            "size_id": 1,
+            "price": 165000
+        }
+    ]
+}
+
+### Get product
+GET http://localhost:8080/api/v1/products/5

@@ -24,7 +24,7 @@ func Create[TRequest any, TResponse any](c *gin.Context,
 }
 
 func Update[TRequest any, TResponse any](c *gin.Context,
-	usecaseUpdate func(ctx context.Context, id int, request TRequest) (TResponse, error)) {
+	usecaseUpdate func(ctx context.Context, id uint, request TRequest) (TResponse, error)) {
 	id, err := strconv.Atoi(c.Params.ByName("id"))
 	if err != nil || id <= 0 {
 		c.JSON(400, gin.H{"error": "Invalid ID"})
@@ -36,7 +36,7 @@ func Update[TRequest any, TResponse any](c *gin.Context,
 		return
 	}
 
-	response, err := usecaseUpdate(c, id, *request)
+	response, err := usecaseUpdate(c, uint(id), *request)
 	if err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
 		return
@@ -45,13 +45,13 @@ func Update[TRequest any, TResponse any](c *gin.Context,
 }
 
 func Delete(c *gin.Context,
-	usecaseDelete func(ctx context.Context, id int) error) {
+	usecaseDelete func(ctx context.Context, id uint) error) {
 	id, err := strconv.Atoi(c.Params.ByName("id"))
 	if err != nil || id <= 0 {
 		c.JSON(400, gin.H{"error": "Invalid ID"})
 		return
 	}
-	if err := usecaseDelete(c, id); err != nil {
+	if err := usecaseDelete(c, uint(id)); err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
 		return
 	}
@@ -59,13 +59,13 @@ func Delete(c *gin.Context,
 }
 
 func FindById[TResponse any](c *gin.Context,
-	usecaseFindById func(ctx context.Context, id int) (TResponse, error)) {
+	usecaseFindById func(ctx context.Context, id uint) (TResponse, error)) {
 	id, err := strconv.Atoi(c.Params.ByName("id"))
 	if err != nil || id <= 0 {
 		c.JSON(400, gin.H{"error": "Invalid ID"})
 		return
 	}
-	response, err := usecaseFindById(c, id)
+	response, err := usecaseFindById(c, uint(id))
 	if err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
 		return

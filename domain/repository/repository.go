@@ -2,14 +2,15 @@ package repository
 
 import (
 	"bakery-api/domain/model"
-	"context"
+
+	"gorm.io/gorm"
 )
 
 type BaseRepository[TEntity any] interface {
-	Create(ctx context.Context, entity TEntity) (TEntity, error)
-	Update(ctx context.Context, id int, entity TEntity) (TEntity, error)
-	Delete(ctx context.Context, id int) error
-	FindById(ctx context.Context, id int) (TEntity, error)
+	Create(tx *gorm.DB, entity TEntity) (TEntity, error)
+	Update(tx *gorm.DB, id uint, entity TEntity) (TEntity, error)
+	Delete(tx *gorm.DB, id uint) error
+	FindById(tx *gorm.DB, id uint) (TEntity, error)
 }
 
 type CategoryRepository interface {
@@ -22,4 +23,8 @@ type SizeRepository interface {
 
 type ProductRepository interface {
 	BaseRepository[model.Product]
+}
+
+type PriceRepository interface {
+	BaseRepository[model.Price]
 }
