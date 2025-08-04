@@ -1,6 +1,8 @@
 package handler
 
 import (
+	appconstant "bakery-api/app-constant"
+	"bakery-api/internal/usecase/dto"
 	"context"
 	"strconv"
 
@@ -11,7 +13,7 @@ func Create[TRequest any, TResponse any](c *gin.Context,
 	usecaseCreate func(ctx context.Context, request TRequest) (TResponse, error)) {
 	request := new(TRequest)
 	if err := c.ShouldBindJSON(request); err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
+		c.JSON(400, BadRequestError(err, appconstant.INVALID_INPUT))
 		return
 	}
 
@@ -20,7 +22,8 @@ func Create[TRequest any, TResponse any](c *gin.Context,
 		c.JSON(500, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(201, response)
+	apiResponse := dto.NewAPIResponse(response, nil)
+	c.JSON(201, apiResponse)
 }
 
 func Update[TRequest any, TResponse any](c *gin.Context,
@@ -71,4 +74,9 @@ func FindById[TResponse any](c *gin.Context,
 		return
 	}
 	c.JSON(200, response)
+}
+
+func BadRequestError(err error, code string) dto.APIResponse[any] {
+	apiError := dto.NewAPIError(code, err.Error())
+	return dto.NewAPIResponse[any](nil, apiError)
 }
