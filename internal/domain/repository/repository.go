@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"bakery-api/domain/model"
+	"bakery-api/internal/domain/model"
 
 	"gorm.io/gorm"
 )

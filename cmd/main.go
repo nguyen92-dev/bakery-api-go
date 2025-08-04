@@ -1,9 +1,9 @@
 package main
 
 import (
-	"bakery-api/api"
 	"bakery-api/configs"
-	"bakery-api/infra/persisstence/database"
+	"bakery-api/internal/api"
+	"bakery-api/internal/infra/persisstence/database"
 )
 
 func main() {

@@ -2,9 +2,9 @@ package usecase
 
 import (
 	"bakery-api/common"
-	"bakery-api/domain/model"
-	"bakery-api/domain/repository"
-	"bakery-api/usecase/dto"
+	"bakery-api/internal/domain/model"
+	"bakery-api/internal/domain/repository"
+	"bakery-api/internal/usecase/dto"
 	"context"
 	"errors"
 )

@@ -2,8 +2,8 @@ package usecase
 
 import (
 	"bakery-api/common"
-	"bakery-api/domain/repository"
-	"bakery-api/infra/persisstence/database"
+	"bakery-api/internal/domain/repository"
+	"bakery-api/internal/infra/persisstence/database"
 	"context"
 )
 

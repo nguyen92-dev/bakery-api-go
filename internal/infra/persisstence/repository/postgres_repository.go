@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"bakery-api/infra/persisstence/database"
+	"bakery-api/internal/infra/persisstence/database"
 
 	"gorm.io/gorm"
 )

@@ -1,11 +1,11 @@
 package dependency
 
 import (
-	"bakery-api/domain/model"
-	contractRepository "bakery-api/domain/repository"
-	"bakery-api/infra/persisstence/database"
-	infraRepository "bakery-api/infra/persisstence/repository"
-	"bakery-api/usecase"
+	"bakery-api/internal/domain/model"
+	contractRepository "bakery-api/internal/domain/repository"
+	"bakery-api/internal/infra/persisstence/database"
+	infraRepository "bakery-api/internal/infra/persisstence/repository"
+	"bakery-api/internal/usecase"
 )
 
 // Dependency injection

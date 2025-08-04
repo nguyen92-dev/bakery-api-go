@@ -1,7 +1,7 @@
 package router
 
 import (
-	"bakery-api/api/handler"
+	"bakery-api/internal/api/handler"
 
 	"github.com/gin-gonic/gin"
 )

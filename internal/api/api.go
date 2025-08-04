@@ -1,9 +1,8 @@
 package api
 
 import (
-	"bakery-api/api/router"
-
-	customValidator "bakery-api/usecase/validator"
+	"bakery-api/internal/api/router"
+	customValidator "bakery-api/internal/usecase/validator"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"

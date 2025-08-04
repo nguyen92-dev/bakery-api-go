@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"bakery-api/dependency"
-	"bakery-api/usecase"
+	"bakery-api/internal/dependency"
+	"bakery-api/internal/usecase"
 
 	"github.com/gin-gonic/gin"
 )
