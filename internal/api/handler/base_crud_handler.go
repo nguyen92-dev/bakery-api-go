@@ -3,6 +3,7 @@ package handler
 import (
 	appconstant "bakery-api/app-constant"
 	"bakery-api/internal/usecase/dto"
+	"bakery-api/internal/usecase/validator"
 	"context"
 	"strconv"
 
@@ -77,6 +78,6 @@ func FindById[TResponse any](c *gin.Context,
 }
 
 func BadRequestError(err error, code string) dto.APIResponse[any] {
-	apiError := dto.NewAPIError(code, err.Error())
-	return dto.NewAPIResponse[any](nil, apiError)
+	apiError := validator.GetValidateError(err)
+	return dto.NewAPIResponse[any](nil, &apiError)
 }
