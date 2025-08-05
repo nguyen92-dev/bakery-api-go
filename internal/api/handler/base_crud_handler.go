@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"bakery-api/internal/usecase/dto"
 	"context"
 	"strconv"
 
@@ -8,23 +9,23 @@ import (
 )
 
 func Create[TRequest any, TResponse any](c *gin.Context,
-	usecaseCreate func(ctx context.Context, request TRequest) (TResponse, error)) {
+	useCaseCreate func(ctx context.Context, request TRequest) (TResponse, error)) {
 	request := new(TRequest)
-	if err := c.ShouldBindJSON(request); err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
+	if ErrorHandler(c, c.ShouldBindJSON(request)) {
 		return
 	}
 
-	response, err := usecaseCreate(c, *request)
+	response, err := useCaseCreate(c, *request)
 	if err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(201, response)
+	apiResponse := dto.NewAPIResponse(response, nil)
+	c.JSON(201, apiResponse)
 }
 
 func Update[TRequest any, TResponse any](c *gin.Context,
-	usecaseUpdate func(ctx context.Context, id uint, request TRequest) (TResponse, error)) {
+	useCaseUpdate func(ctx context.Context, id uint, request TRequest) (TResponse, error)) {
 	id, err := strconv.Atoi(c.Params.ByName("id"))
 	if err != nil || id <= 0 {
 		c.JSON(400, gin.H{"error": "Invalid ID"})
@@ -32,26 +33,26 @@ func Update[TRequest any, TResponse any](c *gin.Context,
 	}
 	request := new(TRequest)
 	if err := c.ShouldBindJSON(request); err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
+		ErrorHandler(c, err)
 		return
 	}
 
-	response, err := usecaseUpdate(c, uint(id), *request)
+	response, err := useCaseUpdate(c, uint(id), *request)
 	if err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(200, response)
+	c.JSON(200, dto.NewAPIResponse(response, nil))
 }
 
 func Delete(c *gin.Context,
-	usecaseDelete func(ctx context.Context, id uint) error) {
+	useCaseDelete func(ctx context.Context, id uint) error) {
 	id, err := strconv.Atoi(c.Params.ByName("id"))
 	if err != nil || id <= 0 {
 		c.JSON(400, gin.H{"error": "Invalid ID"})
 		return
 	}
-	if err := usecaseDelete(c, uint(id)); err != nil {
+	if err := useCaseDelete(c, uint(id)); err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
 		return
 	}
@@ -59,16 +60,16 @@ func Delete(c *gin.Context,
 }
 
 func FindById[TResponse any](c *gin.Context,
-	usecaseFindById func(ctx context.Context, id uint) (TResponse, error)) {
+	useCaseFindById func(ctx context.Context, id uint) (TResponse, error)) {
 	id, err := strconv.Atoi(c.Params.ByName("id"))
 	if err != nil || id <= 0 {
 		c.JSON(400, gin.H{"error": "Invalid ID"})
 		return
 	}
-	response, err := usecaseFindById(c, uint(id))
+	response, err := useCaseFindById(c, uint(id))
 	if err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(200, response)
+	c.JSON(200, dto.NewAPIResponse(response, nil))
 }

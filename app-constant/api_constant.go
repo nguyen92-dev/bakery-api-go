@@ -1,0 +1,4 @@
+package appconstant
+
+const INVALID_INPUT = "INVALID_INPUT"
+const INTERNAL_ERROR = "INTERNAL_ERROR"
