@@ -20,7 +20,7 @@ Content-Type: application/json
 
 
 ### Get category by id
-GET http://localhost:8080/api/v1/categories/1
+GET http://localhost:8080/api/v1/categories/2
 
 
 ### Delete category by id
@@ -51,7 +51,7 @@ Content-Type: application/json
 }
 
 ### Get size by id
-GET http://localhost:8080/api/v1/sizes/1
+GET http://localhost:8080/api/v1/sizes/a
 
 
 ### Delete size by id
@@ -92,3 +92,27 @@ Content-Type: application/json
 
 ### Get product
 GET http://localhost:8080/api/v1/products/3
+
+
+### Vietnamese Language Tests
+
+### Test invalid ID with Vietnamese language
+GET http://localhost:8080/api/v1/products/abc
+Accept-Language: vi
+
+### Test invalid ID with English language (default)
+GET http://localhost:8080/api/v1/products/abc
+
+### Test delete with Vietnamese language
+DELETE http://localhost:8080/api/v1/categories/999
+Accept-Language: vi
+
+### Test validation error with Vietnamese language
+POST http://localhost:8080/api/v1/categories
+Content-Type: application/json
+Accept-Language: vi
+
+{
+    "name": "Bánh kem trai cay%$$#",
+    "description": "Bánh kem trai cay với nhiều hương vị khác nhau"
+}

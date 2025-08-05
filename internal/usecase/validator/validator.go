@@ -2,7 +2,6 @@ package validator
 
 import (
 	"bakery-api/internal/usecase/dto"
-	"errors"
 	"regexp"
 
 	"github.com/go-playground/validator/v10"
@@ -16,16 +15,12 @@ func ValidateNonSpecialCharacter(fl validator.FieldLevel) bool {
 	return matched
 }
 
-func GetValidateError(err error) []dto.APIError {
-	var ve validator.ValidationErrors
-	if errors.As(err, &ve) {
-		out := make([]dto.APIError, len(ve))
-		for i, fe := range ve {
-			out[i] = dto.APIError{Code: fe.Field(), Message: msgForTag(fe.Tag())}
-		}
-		return out
+func GetValidateError(err *validator.ValidationErrors) []dto.APIError {
+	out := make([]dto.APIError, len(*err))
+	for i, fe := range *err {
+		out[i] = dto.APIError{Code: fe.Field(), Message: msgForTag(fe.Tag())}
 	}
-	return []dto.APIError{}
+	return out
 }
 
 func msgForTag(tag string) string {
@@ -33,7 +28,7 @@ func msgForTag(tag string) string {
 	case "required":
 		return "This field is required"
 	case "non_special_char":
-		return "Can not containss special character"
+		return "Can not contains special character"
 	}
 	return "invalid input"
 }

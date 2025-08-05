@@ -1,4 +1,4 @@
-package main
+package web_api
 
 import (
 	"bakery-api/configs"
@@ -6,7 +6,14 @@ import (
 	"bakery-api/internal/infra/persisstence/database"
 )
 
-func main() {
+type WebAPI struct {
+}
+
+func NewWebAPI() *WebAPI {
+	return &WebAPI{}
+}
+
+func (app *WebAPI) Run() {
 	configs.Cfg = configs.GetConfig()
 
 	err := database.InitDb(configs.Cfg)
