@@ -14,6 +14,10 @@ func NewAPIResponse[TResponse any](data TResponse, err []APIError) APIResponse[T
 	return APIResponse[TResponse]{Data: data, Error: err}
 }
 
+func NewErrorResponse(err []APIError) APIResponse[any] {
+	return NewAPIResponse[any](nil, err)
+}
+
 func NewAPIError(code string, message string) APIError {
 	return APIError{Code: code, Message: message}
 }
