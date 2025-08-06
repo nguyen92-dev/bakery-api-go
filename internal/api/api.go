@@ -1,6 +1,7 @@
 package api
 
 import (
+	"bakery-api/internal/api/middleware/error_handler"
 	"bakery-api/internal/api/router"
 	customValidator "bakery-api/internal/usecase/validator"
 
@@ -11,6 +12,9 @@ import (
 
 func InitServer() {
 	r := gin.Default()
+
+	r.Use(error_handler.ErrorHandler())
+
 	RegisterRoutes(r)
 	RegisterValidator()
 

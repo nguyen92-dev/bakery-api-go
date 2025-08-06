@@ -1,12 +1,12 @@
 package error_handler
 
 import (
-	custom_errors "bakery-api/configs/custom-errors"
+	customerrors "bakery-api/configs/custom-errors"
 	"bakery-api/internal/usecase/dto"
 	"errors"
 	"net/http"
 
-	custom_validator "bakery-api/internal/usecase/validator"
+	customvalidator "bakery-api/internal/usecase/validator"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -38,7 +38,7 @@ func handleError(ctx *gin.Context, err error) {
 	}
 
 	var bindingErrors validator.ValidationErrors
-	var notFoundError custom_errors.NotFoundError
+	var notFoundError customerrors.NotFoundError
 
 	switch {
 	case errors.As(err, &bindingErrors):
@@ -61,12 +61,12 @@ func handleInternalError(ctx *gin.Context, err error) {
 }
 
 func handleValidationErrors(ctx *gin.Context, validationErrors *validator.ValidationErrors) {
-	apiErrors := custom_validator.GetValidateError(validationErrors)
+	apiErrors := customvalidator.GetValidateError(validationErrors)
 
 	ctx.JSON(http.StatusBadRequest, dto.NewErrorResponse(apiErrors))
 }
 
-func handleNotFoundError(ctx *gin.Context, notFoundError custom_errors.NotFoundError) {
+func handleNotFoundError(ctx *gin.Context, notFoundError customerrors.NotFoundError) {
 	defaultMessage := "Can not found "
 
 	apiErrors := []dto.APIError{

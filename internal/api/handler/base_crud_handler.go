@@ -1,6 +1,8 @@
 package handler
 
 import (
+	customerrors "bakery-api/configs/custom-errors"
+	"bakery-api/internal/api/middleware/error_handler"
 	"bakery-api/internal/usecase/dto"
 	"context"
 	"strconv"
@@ -11,7 +13,7 @@ import (
 func Create[TRequest any, TResponse any](c *gin.Context,
 	useCaseCreate func(ctx context.Context, request TRequest) (TResponse, error)) {
 	request := new(TRequest)
-	if ErrorHandler(c, c.ShouldBindJSON(request)) {
+	if error_handler.ThrowError(c, c.ShouldBindJSON(request)) {
 		return
 	}
 
@@ -67,8 +69,7 @@ func FindById[TResponse any](c *gin.Context,
 		return
 	}
 	response, err := useCaseFindById(c, uint(id))
-	if err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
+	if error_handler.ThrowError(c, customerrors.NotFoundError{Message: "id does not exist"}) {
 		return
 	}
 	c.JSON(200, dto.NewAPIResponse(response, nil))
