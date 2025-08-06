@@ -32,7 +32,7 @@ POST http://localhost:8080/api/v1/sizes
 Content-Type: application/json
 
 {
-    "name": "Size S%$",
+    "name": "Size S%$ffffffff",
     "category_id": 1,
     "created_by": "NguyenND",
     "updated_by": "NguyenND"

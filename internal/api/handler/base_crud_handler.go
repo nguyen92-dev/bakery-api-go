@@ -1,10 +1,10 @@
 package handler
 
 import (
-	customerrors "bakery-api/configs/custom-errors"
 	"bakery-api/internal/api/middleware/error_handler"
 	"bakery-api/internal/usecase/dto"
 	"context"
+	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -22,7 +22,7 @@ func Create[TRequest any, TResponse any](c *gin.Context,
 		c.JSON(500, gin.H{"error": err.Error()})
 		return
 	}
-	apiResponse := dto.NewAPIResponse(response, nil)
+	apiResponse := dto.SuccessResponse(http.StatusCreated, response)
 	c.JSON(201, apiResponse)
 }
 
@@ -44,7 +44,7 @@ func Update[TRequest any, TResponse any](c *gin.Context,
 		c.JSON(500, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(200, dto.NewAPIResponse(response, nil))
+	c.JSON(200, dto.SuccessResponse(http.StatusOK, response))
 }
 
 func Delete(c *gin.Context,
@@ -69,8 +69,8 @@ func FindById[TResponse any](c *gin.Context,
 		return
 	}
 	response, err := useCaseFindById(c, uint(id))
-	if error_handler.ThrowError(c, customerrors.NotFoundError{Message: "id does not exist"}) {
+	if error_handler.ThrowError(c, err) {
 		return
 	}
-	c.JSON(200, dto.NewAPIResponse(response, nil))
+	c.JSON(200, dto.SuccessResponse(http.StatusOK, response))
 }

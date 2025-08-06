@@ -1,9 +1,11 @@
 package error_handler
 
 import (
+	appconstant "bakery-api/app-constant"
 	customerrors "bakery-api/configs/custom-errors"
 	"bakery-api/internal/usecase/dto"
 	"errors"
+	"fmt"
 	"net/http"
 
 	customvalidator "bakery-api/internal/usecase/validator"
@@ -51,30 +53,21 @@ func handleError(ctx *gin.Context, err error) {
 }
 
 func handleInternalError(ctx *gin.Context, err error) {
-	apiError := []dto.APIError{
-		{
-			Code:    "500",
-			Message: err.Error(),
-		},
-	}
-	ctx.JSON(http.StatusInternalServerError, dto.NewErrorResponse(apiError))
+	apiError := dto.NewAPIError(appconstant.INTERNAL_ERROR, "internal error", err.Error())
+	ctx.JSON(http.StatusInternalServerError, dto.ErrorResponse(http.StatusInternalServerError, apiError))
 }
 
 func handleValidationErrors(ctx *gin.Context, validationErrors *validator.ValidationErrors) {
-	apiErrors := customvalidator.GetValidateError(validationErrors)
-
-	ctx.JSON(http.StatusBadRequest, dto.NewErrorResponse(apiErrors))
+	errorDetails := customvalidator.GetValidateError(validationErrors)
+	apiError := dto.NewAPIError(appconstant.VALIDATION_ERROR, "binding error", errorDetails)
+	ctx.JSON(http.StatusBadRequest, dto.ErrorResponse(http.StatusBadRequest, apiError))
 }
 
 func handleNotFoundError(ctx *gin.Context, notFoundError customerrors.NotFoundError) {
-	defaultMessage := "Can not found "
+	defaultMessage := "Can not found %s"
 
-	apiErrors := []dto.APIError{
-		{
-			Code:    "404",
-			Message: defaultMessage + notFoundError.Message,
-		},
-	}
+	apiErrors := dto.NewAPIError(appconstant.NOT_FOUND_ERROR,
+		fmt.Sprintf(defaultMessage, notFoundError.Message), nil)
 
-	ctx.JSON(http.StatusNotFound, dto.NewErrorResponse(apiErrors))
+	ctx.JSON(http.StatusNotFound, dto.ErrorResponse(http.StatusNotFound, apiErrors))
 }

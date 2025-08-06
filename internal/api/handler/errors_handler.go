@@ -5,6 +5,7 @@ import (
 	"bakery-api/internal/usecase/dto"
 	validator2 "bakery-api/internal/usecase/validator"
 	"errors"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -21,17 +22,14 @@ func ErrorHandler(ctx *gin.Context, err error) bool {
 		handlerValidationError(ctx, &validationErrors)
 		return true
 	default:
-		ctx.JSON(500, dto.NewAPIResponse[any](nil, []dto.APIError{
-			{
-				Code:    appconstant.INTERNAL_ERROR,
-				Message: "internal_error",
-			},
-		}))
+		internalError := dto.NewAPIError(appconstant.INTERNAL_ERROR, "internal error", err.Error())
+		ctx.JSON(500, dto.ErrorResponse(http.StatusInternalServerError, internalError))
 		return true
 	}
 }
 
 func handlerValidationError(ctx *gin.Context, err *validator.ValidationErrors) {
-	apiError := validator2.GetValidateError(err)
-	ctx.JSON(400, dto.NewAPIResponse[any](nil, apiError))
+	details := validator2.GetValidateError(err)
+	varlidationError := dto.NewAPIError(appconstant.VALIDATION_ERROR, "validation error", details)
+	ctx.JSON(400, dto.ErrorResponse(http.StatusBadRequest, varlidationError))
 }
