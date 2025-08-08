@@ -1,23 +1,27 @@
 package dto
 
 type APIResponse[TResponse any] struct {
-	Data  TResponse  `json:"data"`
-	Error []APIError `json:"error"`
+	Status   int       `json:"status"`
+	Success  bool      `json:"success"`
+	Data     TResponse `json:"data,omitempty"`
+	Error    *APIError `json:"error,omitempty"`
+	Metadata any       `json:"metadata,omitempty"`
 }
 
 type APIError struct {
-	Code    string `json:"code"`
-	Message string `json:"message"`
+	ErrorType string `json:"type"`
+	Message   string `json:"message"`
+	Detail    any    `json:"detail,omitempty"`
 }
 
-func NewAPIResponse[TResponse any](data TResponse, err []APIError) APIResponse[TResponse] {
-	return APIResponse[TResponse]{Data: data, Error: err}
+func SuccessResponse[TResponse any](status int, data TResponse) APIResponse[TResponse] {
+	return APIResponse[TResponse]{Status: status, Data: data, Success: true}
 }
 
-func NewErrorResponse(err []APIError) APIResponse[any] {
-	return NewAPIResponse[any](nil, err)
+func ErrorResponse(status int, err APIError) APIResponse[any] {
+	return APIResponse[any]{Status: status, Error: &err, Success: false}
 }
 
-func NewAPIError(code string, message string) APIError {
-	return APIError{Code: code, Message: message}
+func NewAPIError(errType string, message string, details any) APIError {
+	return APIError{ErrorType: errType, Message: message, Detail: details}
 }
