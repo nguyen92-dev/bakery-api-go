@@ -4,7 +4,7 @@ type APIResponse[TResponse any] struct {
 	Status   int       `json:"status"`
 	Success  bool      `json:"success"`
 	Data     TResponse `json:"data,omitempty"`
-	Error    APIError  `json:"error,omitempty"`
+	Error    *APIError `json:"error,omitempty"`
 	Metadata any       `json:"metadata,omitempty"`
 }
 
@@ -19,7 +19,7 @@ func SuccessResponse[TResponse any](status int, data TResponse) APIResponse[TRes
 }
 
 func ErrorResponse(status int, err APIError) APIResponse[any] {
-	return APIResponse[any]{Status: status, Error: err, Success: false}
+	return APIResponse[any]{Status: status, Error: &err, Success: false}
 }
 
 func NewAPIError(errType string, message string, details any) APIError {
