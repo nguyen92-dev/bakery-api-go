@@ -22,7 +22,7 @@ func ErrorHandler(ctx *gin.Context, err error) bool {
 		handlerValidationError(ctx, &validationErrors)
 		return true
 	default:
-		internalError := dto.NewAPIError(appconstant.INTERNAL_ERROR, "internal error", err.Error())
+		internalError := dto.NewAPIError(appconstant.InternalError, "internal error", err.Error())
 		ctx.JSON(500, dto.ErrorResponse(http.StatusInternalServerError, internalError))
 		return true
 	}
@@ -30,6 +30,6 @@ func ErrorHandler(ctx *gin.Context, err error) bool {
 
 func handlerValidationError(ctx *gin.Context, err *validator.ValidationErrors) {
 	details := validator2.GetValidateError(err)
-	varlidationError := dto.NewAPIError(appconstant.VALIDATION_ERROR, "validation error", details)
+	varlidationError := dto.NewAPIError(appconstant.ValidationError, "validation error", details)
 	ctx.JSON(400, dto.ErrorResponse(http.StatusBadRequest, varlidationError))
 }

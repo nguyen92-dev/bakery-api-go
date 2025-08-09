@@ -41,32 +41,42 @@ func handleError(ctx *gin.Context, err error) {
 
 	var bindingErrors validator.ValidationErrors
 	var notFoundError customerrors.NotFoundError
+	var badRequestError customerrors.BadRequestError
 
 	switch {
 	case errors.As(err, &bindingErrors):
 		handleValidationErrors(ctx, &bindingErrors)
 	case errors.As(err, &notFoundError):
 		handleNotFoundError(ctx, notFoundError)
+	case errors.As(err, &badRequestError):
+		handleBadRequestError(ctx, badRequestError)
 	default:
 		handleInternalError(ctx, err)
 	}
 }
 
+func handleBadRequestError(ctx *gin.Context, requestError customerrors.BadRequestError) {
+	defaultMessage := "Invalid request: %s"
+
+	apiError := dto.NewAPIError(appconstant.BadRequestError, fmt.Sprintf(defaultMessage, requestError.Error()), nil)
+	ctx.JSON(http.StatusBadRequest, dto.ErrorResponse(http.StatusBadRequest, apiError))
+}
+
 func handleInternalError(ctx *gin.Context, err error) {
-	apiError := dto.NewAPIError(appconstant.INTERNAL_ERROR, "internal error", err.Error())
+	apiError := dto.NewAPIError(appconstant.InternalError, "internal error", err.Error())
 	ctx.JSON(http.StatusInternalServerError, dto.ErrorResponse(http.StatusInternalServerError, apiError))
 }
 
 func handleValidationErrors(ctx *gin.Context, validationErrors *validator.ValidationErrors) {
 	errorDetails := customvalidator.GetValidateError(validationErrors)
-	apiError := dto.NewAPIError(appconstant.VALIDATION_ERROR, "binding error", errorDetails)
+	apiError := dto.NewAPIError(appconstant.ValidationError, "binding error", errorDetails)
 	ctx.JSON(http.StatusBadRequest, dto.ErrorResponse(http.StatusBadRequest, apiError))
 }
 
 func handleNotFoundError(ctx *gin.Context, notFoundError customerrors.NotFoundError) {
 	defaultMessage := "Can not found %s"
 
-	apiErrors := dto.NewAPIError(appconstant.NOT_FOUND_ERROR,
+	apiErrors := dto.NewAPIError(appconstant.NotFoundError,
 		fmt.Sprintf(defaultMessage, notFoundError.Message), nil)
 
 	ctx.JSON(http.StatusNotFound, dto.ErrorResponse(http.StatusNotFound, apiErrors))

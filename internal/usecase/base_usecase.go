@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"bakery-api/common"
-	custom_errors "bakery-api/configs/custom-errors"
+	customerrors "bakery-api/configs/custom-errors"
 	"bakery-api/internal/domain/repository"
 	"bakery-api/internal/infra/persisstence/database"
 	"context"
@@ -75,7 +75,7 @@ func (u *BaseUseCase[TEntity, TRequest, TResponse]) FindById(ctx context.Context
 	}
 	entity, err := u.Repository.FindById(transaction.DB(), id)
 	if err != nil {
-		return response, custom_errors.NotFoundError{Message: fmt.Sprintf("%d does not exist", id)}
+		return response, customerrors.NotFoundError{Message: fmt.Sprintf("%d does not exist", id)}
 	}
 	response, _ = common.Mapper[TResponse](entity)
 	return response, nil

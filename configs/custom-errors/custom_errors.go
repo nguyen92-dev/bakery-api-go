@@ -7,3 +7,11 @@ type NotFoundError struct {
 func (e NotFoundError) Error() string {
 	return e.Message
 }
+
+type BadRequestError struct {
+	Message string
+}
+
+func (e BadRequestError) Error() string {
+	return e.Message
+}

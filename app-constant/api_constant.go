@@ -1,5 +1,6 @@
 package appconstant
 
-const VALIDATION_ERROR = "VALIDATION_ERROR"
-const INTERNAL_ERROR = "INTERNAL_ERROR"
-const NOT_FOUND_ERROR = "NOT_FOUND_ERROR"
+const ValidationError = "VALIDATION_ERROR"
+const InternalError = "INTERNAL_ERROR"
+const NotFoundError = "NOT_FOUND_ERROR"
+const BadRequestError = "BAD_REQUEST_ERROR"
