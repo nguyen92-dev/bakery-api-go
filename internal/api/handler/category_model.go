@@ -7,28 +7,28 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type CategoryModelHanldler struct {
+type CategoryModelHandler struct {
 	usecase *usecase.CategoryUseCase
 }
 
-func NewCategoryModelHandler() *CategoryModelHanldler {
-	return &CategoryModelHanldler{
+func NewCategoryModelHandler() *CategoryModelHandler {
+	return &CategoryModelHandler{
 		usecase: dependency.GetCategoryUseCase(),
 	}
 }
 
-func (h *CategoryModelHanldler) CreateCategory(c *gin.Context) {
+func (h *CategoryModelHandler) CreateCategory(c *gin.Context) {
 	Create(c, h.usecase.Create)
 }
 
-func (h *CategoryModelHanldler) UpdateCategory(c *gin.Context) {
+func (h *CategoryModelHandler) UpdateCategory(c *gin.Context) {
 	Update(c, h.usecase.Update)
 }
 
-func (h *CategoryModelHanldler) DeleteCategory(c *gin.Context) {
+func (h *CategoryModelHandler) DeleteCategory(c *gin.Context) {
 	Delete(c, h.usecase.Delete)
 }
 
-func (h *CategoryModelHanldler) GetCategory(c *gin.Context) {
+func (h *CategoryModelHandler) GetCategory(c *gin.Context) {
 	FindById(c, h.usecase.FindById)
 }

@@ -48,7 +48,7 @@ func NewSizeUseCase(repo repository.SizeRepository, categoryRepo repository.Cate
 }
 
 func (uc *SizeUseCase) Create(ctx context.Context, request dto.SizeRequestDto) (dto.SizeResponseDto, error) {
-	if !uc.categoryUseCase.base.ValidateId(ctx, uint(request.CategoryID)) {
+	if !uc.categoryUseCase.base.ValidateId(ctx, request.CategoryID) {
 		return dto.SizeResponseDto{}, errors.New("category ID does not exist")
 	}
 	return uc.base.Create(ctx, request)
@@ -109,7 +109,7 @@ func NewProductUseCase(repo repository.ProductRepository, sizeUseCase *SizeUseCa
 }
 
 func (uc *ProductUseCase) Create(ctx context.Context, request dto.ProductRequestDto) (dto.ProductResponseDto, error) {
-	if !uc.CategoryUseCase.base.ValidateId(ctx, uint(request.CategoryID)) {
+	if !uc.CategoryUseCase.base.ValidateId(ctx, request.CategoryID) {
 		return dto.ProductResponseDto{}, errors.New("category ID does not exist")
 	}
 	tx, err := uc.base.TransactionManager.Begin(ctx)
@@ -117,7 +117,7 @@ func (uc *ProductUseCase) Create(ctx context.Context, request dto.ProductRequest
 		return dto.ProductResponseDto{}, err
 	}
 	for _, price := range request.Prices {
-		if !uc.SizeUseCase.base.ValidateId(ctx, uint(price.SizeID)) {
+		if !uc.SizeUseCase.base.ValidateId(ctx, price.SizeID) {
 			tx.Rollback()
 			return dto.ProductResponseDto{}, errors.New("size ID does not exist")
 		}

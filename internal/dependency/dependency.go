@@ -22,12 +22,12 @@ var productUseCase *usecase.ProductUseCase
 var priceUseCase *usecase.PriceUseCase
 
 func InitCategoryRepository() {
-	preloads := []database.PreloadEntity{}
+	var preloads []database.PreloadEntity
 	categoryRepository = infraRepository.NewBaseRepository[model.Category](preloads)
 }
 
 func InitSizeRepository() {
-	preloads := []database.PreloadEntity{}
+	var preloads []database.PreloadEntity
 	sizeRepository = infraRepository.NewBaseRepository[model.Size](preloads)
 }
 
@@ -59,7 +59,7 @@ func InitProductUseCase() {
 	productUseCase = usecase.NewProductUseCase(GetProductRepository(), GetSizeUseCase(), GetCategoryUseCase(), GetPriceUseCase())
 }
 
-func InitPriceUsecase() {
+func InitPriceUseCase() {
 	priceUseCase = usecase.NewPriceUseCase(GetPriceRepository())
 }
 
@@ -114,7 +114,7 @@ func GetProductUseCase() *usecase.ProductUseCase {
 
 func GetPriceUseCase() *usecase.PriceUseCase {
 	if priceUseCase == nil {
-		InitPriceUsecase()
+		InitPriceUseCase()
 	}
 	return priceUseCase
 }

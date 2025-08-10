@@ -12,6 +12,10 @@ type BadRequestError struct {
 	Message string
 }
 
+func InvalidIdError() BadRequestError {
+	return BadRequestError{"Invalid id parameter"}
+}
+
 func (e BadRequestError) Error() string {
 	return e.Message
 }

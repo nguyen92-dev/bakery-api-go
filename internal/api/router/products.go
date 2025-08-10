@@ -16,12 +16,12 @@ func Categories(r *gin.RouterGroup) {
 }
 
 func Sizes(r *gin.RouterGroup) {
-	handler := handler.NewSizeModelHandler()
+	h := handler.NewSizeModelHandler()
 
-	r.POST("/", handler.CreateSize)
-	r.PUT("/:id", handler.UpdateSize)
-	r.DELETE("/:id", handler.DeleteSize)
-	r.GET("/:id", handler.GetSizeById)
+	r.POST("/", h.CreateSize)
+	r.PUT("/:id", h.UpdateSize)
+	r.DELETE("/:id", h.DeleteSize)
+	r.GET("/:id", h.GetSizeById)
 }
 
 func Products(r *gin.RouterGroup) {

@@ -1,7 +1,7 @@
 package handler
 
 import (
-	custom_errors "bakery-api/configs/custom-errors"
+	customerrors "bakery-api/configs/custom-errors"
 	"bakery-api/internal/api/middleware/error_handler"
 	"bakery-api/internal/usecase/dto"
 	"context"
@@ -30,9 +30,7 @@ func Update[TRequest any, TResponse any](c *gin.Context,
 	useCaseUpdate func(ctx context.Context, id uint, request TRequest) (TResponse, error)) {
 	id, err := strconv.Atoi(c.Params.ByName("id"))
 	if err != nil || id <= 0 {
-		error_handler.ThrowError(c, custom_errors.BadRequestError{
-			Message: "Invalid id parameter",
-		})
+		error_handler.ThrowError(c, customerrors.InvalidIdError())
 		return
 	}
 	request := new(TRequest)
@@ -51,9 +49,7 @@ func Delete(c *gin.Context,
 	useCaseDelete func(ctx context.Context, id uint) error) {
 	id, err := strconv.Atoi(c.Params.ByName("id"))
 	if err != nil || id <= 0 {
-		error_handler.ThrowError(c, custom_errors.BadRequestError{
-			Message: "Invalid id parameter",
-		})
+		error_handler.ThrowError(c, customerrors.InvalidIdError())
 		return
 	}
 	if error_handler.ThrowError(c, useCaseDelete(c, uint(id))) {
@@ -66,9 +62,7 @@ func FindById[TResponse any](c *gin.Context,
 	useCaseFindById func(ctx context.Context, id uint) (TResponse, error)) {
 	id, err := strconv.Atoi(c.Params.ByName("id"))
 	if err != nil || id <= 0 {
-		error_handler.ThrowError(c, custom_errors.BadRequestError{
-			Message: "Invalid id parameter",
-		})
+		error_handler.ThrowError(c, customerrors.InvalidIdError())
 		return
 	}
 	response, err := useCaseFindById(c, uint(id))
@@ -77,3 +71,5 @@ func FindById[TResponse any](c *gin.Context,
 	}
 	c.JSON(200, dto.SuccessResponse(http.StatusOK, response))
 }
+
+//TODO: Implement pagelist with dynamic filter
