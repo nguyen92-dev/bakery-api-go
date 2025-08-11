@@ -7,14 +7,14 @@ import (
 )
 
 type BaseRepository[TEntity any] struct {
-	database *gorm.DB
-	preloads []database.PreloadEntity
+	Database *gorm.DB
+	Preloads []database.PreloadEntity
 }
 
 func NewBaseRepository[TEntity any](preloads []database.PreloadEntity) *BaseRepository[TEntity] {
 	return &BaseRepository[TEntity]{
-		database: database.GetDbClient(),
-		preloads: preloads,
+		Database: database.GetDbClient(),
+		Preloads: preloads,
 	}
 }
 
@@ -52,7 +52,7 @@ func (r *BaseRepository[TEntity]) Delete(tx *gorm.DB, id uint) error {
 
 func (r *BaseRepository[TEntity]) FindById(tx *gorm.DB, id uint) (TEntity, error) {
 	model := new(TEntity)
-	db := database.Preload(r.database, r.preloads)
+	db := database.Preload(r.Database, r.Preloads)
 	if err := db.Where("id = ?", id).First(model).Error; err != nil {
 		return *model, err
 	}
