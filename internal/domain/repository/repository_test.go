@@ -79,7 +79,7 @@ func TestCategoryCreateOK(t *testing.T) {
 	entity, err := categoryRepo.Create(gormdb, category)
 	require.NoError(t, err)
 	require.NotNil(t, entity)
-	require.NotNil(t, entity.Id)
+	require.NotNil(t, entity.ID)
 	require.NoError(t, mock.ExpectationsWereMet())
 
 }
@@ -94,13 +94,71 @@ func TestCategoryFindByIdOK(t *testing.T) {
 	querySql := strings.ReplaceAll(regexp.QuoteMeta(q), " ", `\s+`)
 	cols := []string{"id", "created_by", "updated_by", "name", "description"}
 	mock.ExpectQuery(querySql).
-		WithArgs(category.Id, 1).
+		WithArgs(category.ID, 1).
 		WillReturnRows(sqlmock.NewRows(cols).
-			AddRow(category.Id, category.CreatedBy, category.UpdatedBy, category.Name, category.Description))
+			AddRow(category.ID, category.CreatedBy, category.UpdatedBy, category.Name, category.Description))
 
-	entity, err := categoryRepo.FindById(gormdb, category.Id)
+	entity, err := categoryRepo.FindById(gormdb, category.ID)
 	require.NoError(t, err)
 	require.NotNil(t, entity)
 	require.Equal(t, category, entity)
+	require.NoError(t, mock.ExpectationsWereMet())
+}
+
+func TestCategoryFindByIdNotFound(t *testing.T) {
+	gormdb, mock, cleanup := newGormWithMock(t)
+	categoryRepo := mockCategoryRepository(gormdb)
+	defer cleanup()
+
+	q := `SELECT * FROM "categories" WHERE id = $1 ORDER BY "categories"."id" LIMIT $2`
+	querySql := strings.ReplaceAll(regexp.QuoteMeta(q), " ", `\s+`)
+	cols := []string{"id", "created_by", "updated_by", "name", "description"}
+	mock.ExpectQuery(querySql).
+		WithArgs(100, 1).
+		WillReturnRows(sqlmock.NewRows(cols))
+	_, err := categoryRepo.FindById(gormdb, 100)
+	require.Error(t, err)
+	require.ErrorIs(t, err, gorm.ErrRecordNotFound)
+	require.NoError(t, mock.ExpectationsWereMet())
+}
+
+func TestCategoryUpdateOK(t *testing.T) {
+	category := mockCategory()
+	category.ID = 1
+	gormdb, mock, cleanup := newGormWithMock(t)
+	defer cleanup()
+	categoryRepo := mockCategoryRepository(gormdb)
+
+	q := `UPDATE "categories" SET .* WHERE id = \$5 RETURNING .*`
+	updateSQL := regexp.MustCompile(q).String() // cho rõ là regex
+
+	mock.ExpectBegin()
+	mock.ExpectQuery(updateSQL).
+		WithArgs(category.CreatedBy, category.UpdatedBy, category.Name, category.Description, category.ID).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "created_by", "updated_by", "name", "description"}).
+			AddRow(category.ID, category.CreatedBy, category.UpdatedBy, category.Name, category.Description))
+	mock.ExpectCommit()
+
+	entity, err := categoryRepo.Update(gormdb, category.ID, category)
+	require.NoError(t, err)
+	require.NotZero(t, entity.ID) // hoặc require.Equal nếu repo trả nguyên input
+	require.NoError(t, mock.ExpectationsWereMet())
+}
+
+func TestDeleteCategoryOK(t *testing.T) {
+	category := mockCategory()
+	category.ID = 1
+	gormdb, mock, cleanup := newGormWithMock(t)
+	categoryRepo := mockCategoryRepository(gormdb)
+	defer cleanup()
+
+	q := `DELETE FROM "categories" WHERE "categories"."id" = $1`
+	mock.ExpectBegin()
+	mock.ExpectExec(regexp.QuoteMeta(q)).
+		WillReturnResult(sqlmock.NewResult(1, 1))
+	mock.ExpectCommit()
+
+	err := categoryRepo.DeleteEntity(gormdb, category)
+	require.NoError(t, err)
 	require.NoError(t, mock.ExpectationsWereMet())
 }

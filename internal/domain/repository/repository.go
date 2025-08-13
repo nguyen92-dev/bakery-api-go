@@ -10,6 +10,7 @@ type BaseRepository[TEntity any] interface {
 	Create(tx *gorm.DB, entity TEntity) (TEntity, error)
 	Update(tx *gorm.DB, id uint, entity TEntity) (TEntity, error)
 	Delete(tx *gorm.DB, id uint) error
+	DeleteEntity(tx *gorm.DB, entity TEntity) error
 	FindById(tx *gorm.DB, id uint) (TEntity, error)
 }
 

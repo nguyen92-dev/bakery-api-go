@@ -4,6 +4,7 @@ import (
 	"bakery-api/internal/infra/persisstence/database"
 
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type BaseRepository[TEntity any] struct {
@@ -26,18 +27,16 @@ func (r *BaseRepository[TEntity]) Create(tx *gorm.DB, entity TEntity) (TEntity, 
 }
 
 func (r *BaseRepository[TEntity]) Update(tx *gorm.DB, id uint, entity TEntity) (TEntity, error) {
-	var existingEntity TEntity
-
-	if err := tx.First(&existingEntity, id).Error; err != nil {
-		tx.Rollback()
-		return existingEntity, err
+	var updatedEntity TEntity
+	if err := tx.Model(&updatedEntity).
+		Where("id = ?", id).
+		Omit("id").
+		Clauses(clause.Returning{}).
+		Updates(entity).Error; err != nil {
+		return updatedEntity, err
 	}
 
-	if err := tx.Model(&existingEntity).Updates(entity).Error; err != nil {
-		return existingEntity, err
-	}
-
-	return existingEntity, nil
+	return updatedEntity, nil
 }
 
 func (r *BaseRepository[TEntity]) Delete(tx *gorm.DB, id uint) error {
@@ -47,6 +46,10 @@ func (r *BaseRepository[TEntity]) Delete(tx *gorm.DB, id uint) error {
 		return err
 	}
 
+	return tx.Delete(&entity).Error
+}
+
+func (r *BaseRepository[TEntity]) DeleteEntity(tx *gorm.DB, entity TEntity) error {
 	return tx.Delete(&entity).Error
 }
 
